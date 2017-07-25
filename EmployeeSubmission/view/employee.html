@@ -1,0 +1,184 @@
+﻿<!DOCTYPE html>
+<html>
+    <head>
+        <title>Employee</title>
+        <meta charset="utf-8" />
+        <link rel="stylesheet" type="text/css" href="/css/style.css">
+        <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.3.14/angular.min.js"></script>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+        <script src="/script/employee-controller.js"></script>
+    </head>
+    <body>
+        <h2 align="center">Employee Data</h2>
+        <div align="center" ng-app="mainApp" ng-controller="employeeController">
+
+            <form name="employeeForm" novalidate>
+                <table border="0">
+                    <tr>
+                        <td>ID:</td>
+                        <td>
+                            <input name="NewID" type="text" ng-model="NewID" required>
+                            <span style="color:red" ng-show="employeeForm.NewID.$invalid">
+                                <span ng-show="employeeForm.NewID.$error.required">ID is required.</span>
+                            </span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>First Name:</td>
+                        <td>
+                            <input name="NewFirstName" type="text" ng-model="NewFirstName" required>
+                            <span style="color:red" ng-show="employeeForm.NewFirstName.$invalid">
+                                <span ng-show="employeeForm.NewFirstName.$error.required">First Name is required.</span>
+                            </span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>Last Name:</td>
+                        <td>
+                            <input name="NewLastName" type="text" ng-model="NewLastName" required>
+                            <span style="color:red" ng-show="employeeForm.NewLastName.$invalid">
+                                <span ng-show="employeeForm.NewLastName.$error.required">Last Name is required.</span>
+                            </span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>Gender:</td>
+                        <td>
+                            <select name="NewGender" ng-model="NewGender" required>
+                                <option value="">-- Select --</option>
+                                <option ng-repeat="gender in genders" value="{{gender.name}}">{{gender.name}}</option>
+                            </select>
+                            <span style="color:red" ng-show="employeeForm.NewGender.$invalid">
+                                <span ng-show="employeeForm.NewGender.$error.required">Gender is required.</span>
+                            </span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>Age:</td>
+                        <td>
+                            <input name="NewAge" type="text" ng-pattern="/^\d+$/" ng-model="NewAge" required>
+                            <span style="color:red" ng-show="employeeForm.NewAge.$invalid">
+                                <span ng-show="employeeForm.NewAge.$error.required">Age is required.</span>
+                                <span ng-show="employeeForm.NewAge.$error.pattern">Age is not numeric.</span>
+                            </span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>Nationality:</td>
+                        <td>
+                            <select name="NewNationality" ng-model="NewNationality" required>
+                                <option value="">-- Select --</option>
+                                <option ng-repeat="country in countries" value="{{country.name}}">{{country.name}}</option>
+                            </select>
+                            <span style="color:red" ng-show="employeeForm.NewNationality.$invalid">
+                                <span ng-show="employeeForm.NewNationality.$error.required">Nationality is required.</span>
+                            </span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>Residence Country:</td>
+                        <td>
+                            <select name="NewResidenceCountry" ng-model="NewResidenceCountry" required>
+                                <option value="">-- Select --</option>
+                                <option ng-repeat="country in countries" value="{{country.name}}">{{country.name}}</option>
+                            </select>
+                            <span style="color:red" ng-show="employeeForm.NewResidenceCountry.$invalid">
+                                <span ng-show="employeeForm.NewResidenceCountry.$error.required">Residence Country is required.</span>
+                            </span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>Position:</td>
+                        <td>
+                            <input name="NewPosition" type="text" ng-model="NewPosition" required>
+                            <span style="color:red" ng-show="employeeForm.NewPosition.$invalid">
+                                <span ng-show="employeeForm.NewPosition.$error.required">Position is required.</span>
+                            </span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>Company:</td>
+                        <td>
+                            <input name="NewCompany" type="text" ng-model="NewCompany" required>
+                            <span style="color:red" ng-show="employeeForm.NewCompany.$invalid">
+                                <span ng-show="employeeForm.NewCompany.$error.required">Company is required.</span>
+                            </span>
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td></td>
+                        <td>
+                            <button ng-click="reset()">Reset</button>
+                            <button ng-disabled="employeeForm.NewID.$invalid || 
+                                    employeeForm.NewFirstName.$invalid || 
+                                    employeeForm.NewLastName.$invalid ||
+                                    employeeForm.NewGender.$invalid ||
+                                    employeeForm.NewAge.$invalid ||
+                                    employeeForm.NewNationality.$invalid ||
+                                    employeeForm.NewResidenceCountry.$invalid ||
+                                    employeeForm.NewPosition.$invalid ||
+                                    employeeForm.NewCompany.$invalid" ng-click="submitEmployee()">
+                                Submit
+                            </button>
+                        </td>
+                    </tr>
+
+                </table>
+            </form>
+
+            <p></p>
+
+            <table>
+                <tr>
+                    <td colspan="100">
+                        <input type="file" id="browse" name="fileupload" style="display: none" onChange="angular.element(this).scope().loadFile(this)" />
+                        <input type="button" value="Load" id="fakeBrowse" ng-click="HandleBrowseClick()" />
+                        <button ng-click="saveFile()">Save</button>
+                        <button ng-click="editEmployee()">Edit</button>
+                        <button ng-click="removeEmployee()">Delete</button>
+                    </td>
+                </tr>
+                <tr>
+                    <th><input type="checkbox" ng-model="toggle" ng-click="toggleAll(toggle)"/></th>
+                    <th>ID</th>
+                    <th>First Name</th>
+                    <th>Last Name</th>
+                    <th>Gender</th>
+                    <th>Age</th>
+                    <th>Nationality</th>
+                    <th>Residence Country</th>
+                    <th>Position</th>
+                    <th>Company</th>
+                </tr>
+                <tr>
+                    <th>&nbsp;&nbsp;</th>
+                    <th><input type="text" placeholder="Filter by ID" ng-model="employeefilter.id"></th>
+                    <th><input type="text" placeholder="Filter by First Name" ng-model="employeefilter.firstname"></th>
+                    <th><input type="text" placeholder="Filter by Last Name" ng-model="employeefilter.lastname"></th>
+                    <th><input type="text" placeholder="Filter by Gender" ng-model="employeefilter.gender"></th>
+                    <th><input type="text" placeholder="Filter by Age" ng-model="employeefilter.age"></th>
+                    <th><input type="text" placeholder="Filter by Nationality" ng-model="employeefilter.nationality"></th>
+                    <th><input type="text" placeholder="Filter by Resident" ng-model="employeefilter.residencecountry"></th>
+                    <th><input type="text" placeholder="Filter by Position" ng-model="employeefilter.position"></th>
+                    <th><input type="text" placeholder="Filter by Company" ng-model="employeefilter.company"></th>
+                </tr>
+                <tr ng-repeat="employee in employees | filter: employeefilter">
+                    <td><input type="checkbox" ng-model="employee.isSelected" /></td>
+                    <td>{{ employee.id }}</td>
+                    <td>{{ employee.firstname }}</td>
+                    <td>{{ employee.lastname }}</td>
+                    <td>{{ employee.gender }}</td>
+                    <td>{{ employee.age }}</td>
+                    <td>{{ employee.nationality }}</td>
+                    <td>{{ employee.residencecountry }}</td>
+                    <td>{{ employee.position }}</td>
+                    <td>{{ employee.company }}</td>
+                </tr>
+            </table>
+
+        </div>
+
+
+    </body>
+</html>
